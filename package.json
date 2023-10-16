@@ -2,7 +2,8 @@
   "name": "@se-2/backend",
   "version": "0.0.1",
   "scripts": {
-    "backend": "nodemon index.ts"
+    "backend": "nodemon index.ts",
+    "start": "node index.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
