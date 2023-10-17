@@ -1,4 +1,4 @@
-import express from "express";
+import * as express from "express";
 import { createGame } from "../controllers/Admin";
 
 const router = express.Router();

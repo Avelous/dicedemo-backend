@@ -1,9 +1,9 @@
 import Game from "../models/Game";
 import Invites from "../models/Invites";
-import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../backend.config";
+import * as bcrypt from "bcrypt";
+import * as jwt from "jsonwebtoken";
 
 async function generateUniqueInvite(length: number) {
   let invites = await Invites.findOne();

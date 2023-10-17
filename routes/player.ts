@@ -1,4 +1,4 @@
-import express from "express";
+import * as express from "express";
 import { join } from "../controllers/Player";
 import { verifyToken } from "../middleware/auth";
 

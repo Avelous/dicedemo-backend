@@ -49,8 +49,12 @@ const gameSchema = new mongoose.Schema(
       default: [],
       validate: {
         validator: function (value: [string]) {
-          // Check if the array only contains unique strings
-          const uniqueStrings = [...new Set(value)];
+          const uniqueStrings: string[] = [];
+          value.forEach(item => {
+            if (!uniqueStrings.includes(item)) {
+              uniqueStrings.push(item);
+            }
+          });
           return uniqueStrings.length === value.length;
         },
         message: "The players array must contain unique strings.",

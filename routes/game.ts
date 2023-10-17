@@ -1,4 +1,4 @@
-import express from "express";
+import * as express from "express";
 import { endGame } from "../controllers/Admin";
 import { verifyToken } from "../middleware/auth";
 

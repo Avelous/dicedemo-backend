@@ -1,10 +1,10 @@
-import express from "express";
-import bodyParser from "body-parser";
+import * as express from "express";
+import * as bodyParser from "body-parser";
 import mongoose from "mongoose";
-import cors from "cors";
-import dotenv from "dotenv";
+import * as cors from "cors";
+import * as dotenv from "dotenv";
 import helmet from "helmet";
-import morgan from "morgan";
+import * as morgan from "morgan";
 import adminRoutes from "./routes/admin";
 import playerRoutes from "./routes/player";
 import gameRoutes from "./routes/game";

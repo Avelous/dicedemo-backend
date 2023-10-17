@@ -1,10 +1,12 @@
 {
   "name": "@se-2/backend",
   "version": "0.0.1",
+  "license": "MIT",
   "scripts": {
-    "backend": "nodemon index.ts",
-    "start": "node index.ts"
+    "backend": "nodemon index.js",
+    "start": "node index.js"
   },
+  "packageManager": "yarn@3.2.3",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
@@ -26,6 +28,8 @@
     "@types/morgan": "^1.9.6",
     "@types/node": "^20.4.2",
     "types": "^0.1.1",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3"
   }
 }
