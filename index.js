@@ -25,9 +25,14 @@ exports.app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 exports.app.use(cors());
 /*Sockets Setup*/
 var server = http.createServer(exports.app);
-var io = new socket_io_1.Server(server, { cors: { origin: "*" } });
+var io = new socket_io_1.Server(server, {
+    cors: { origin: "*", allowedHeaders: ["my-custom-header"], credentials: true, methods: ["GET", "POST"] },
+});
 io.on("connection", function (socket) {
-    console.log("A user connected to Scoket");
+    console.log("A user connected to Socket");
+    socket.on("connect_error", function (err) {
+        console.log("connect_error due to ".concat(err.message));
+    });
     socket.on("disconnect", function () {
         console.log("A user disconnected from Sockets");
     });

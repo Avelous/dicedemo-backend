@@ -35,10 +35,15 @@ app.use(cors());
 
 /*Sockets Setup*/
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, {
+  cors: { origin: "*", allowedHeaders: ["my-custom-header"], credentials: true, methods: ["GET", "POST"] },
+});
 
 io.on("connection", socket => {
-  console.log("A user connected to Scoket");
+  console.log("A user connected to Socket");
+  socket.on("connect_error", err => {
+    console.log(`connect_error due to ${err.message}`);
+  });
   socket.on("disconnect", () => {
     console.log("A user disconnected from Sockets");
   });
