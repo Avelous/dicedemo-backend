@@ -22,7 +22,11 @@ exports.app.use(helmet_1.default.crossOriginResourcePolicy({ policy: "cross-orig
 exports.app.use(morgan("common"));
 exports.app.use(bodyParser.json({ limit: "30mb" }));
 exports.app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-exports.app.use(cors());
+exports.app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PATCH"],
+    credentials: true,
+}));
 /*Sockets Setup*/
 var server = http.createServer(exports.app);
 var io = new socket_io_1.Server(server);
