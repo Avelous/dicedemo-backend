@@ -26,7 +26,12 @@ exports.app.use(cors());
 /*Sockets Setup*/
 var server = http.createServer(exports.app);
 var io = new socket_io_1.Server(server, {
-    cors: { origin: "*", allowedHeaders: ["my-custom-header"], credentials: true, methods: ["GET", "POST"] },
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+        credentials: true,
+    },
+    allowEIO3: true,
 });
 io.on("connection", function (socket) {
     console.log("A user connected to Socket");
