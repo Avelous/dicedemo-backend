@@ -36,7 +36,12 @@ app.use(cors());
 /*Sockets Setup*/
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: "*", allowedHeaders: ["my-custom-header"], credentials: true, methods: ["GET", "POST"] },
+  cors: {
+    origin: "http://localhost:8100",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+  allowEIO3: true,
 });
 
 io.on("connection", socket => {
