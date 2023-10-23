@@ -27,7 +27,7 @@ exports.app.use(cors());
 var server = http.createServer(exports.app);
 var io = new socket_io_1.Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         methods: ["GET", "POST"],
         credentials: true,
     },
