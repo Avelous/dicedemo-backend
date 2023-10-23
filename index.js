@@ -25,14 +25,7 @@ exports.app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 exports.app.use(cors());
 /*Sockets Setup*/
 var server = http.createServer(exports.app);
-var io = new socket_io_1.Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"],
-        credentials: true,
-    },
-    allowEIO3: true,
-});
+var io = new socket_io_1.Server(server);
 io.on("connection", function (socket) {
     console.log("A user connected to Socket");
     socket.on("connect_error", function (err) {

@@ -35,14 +35,7 @@ app.use(cors());
 
 /*Sockets Setup*/
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-  allowEIO3: true,
-});
+const io = new Server(server);
 
 io.on("connection", socket => {
   console.log("A user connected to Socket");
