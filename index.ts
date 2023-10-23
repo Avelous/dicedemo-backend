@@ -31,29 +31,18 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb" }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PATCH"],
-    credentials: true,
-  }),
-);
+app.use(cors());
 
 /*Sockets Setup*/
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST", "PATCH"],
-    credentials: true,
   },
 });
 
 io.on("connection", socket => {
   console.log("A user connected to Socket");
-  socket.on("connect_error", err => {
-    console.log(`connect_error due to ${err.message}`);
-  });
   socket.on("disconnect", () => {
     console.log("A user disconnected from Sockets");
   });
