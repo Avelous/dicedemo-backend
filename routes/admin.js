@@ -2,6 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var Admin_1 = require("../controllers/Admin");
+var auth_1 = require("../middleware/auth");
 var router = express.Router();
 router.post("/create", Admin_1.createGame);
+router.patch("/changemode/:id", auth_1.verifyToken, Admin_1.changeGameMode);
+router.patch("/pause/:id", auth_1.verifyToken, Admin_1.pauseGame);
+router.patch("/resume/:id", auth_1.verifyToken, Admin_1.resumeGame);
+router.patch("/kickplayer/:id", auth_1.verifyToken, Admin_1.kickPlayer);
 exports.default = router;

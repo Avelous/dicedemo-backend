@@ -42,14 +42,15 @@ var jwt = require("jsonwebtoken");
 var JWT_SECRET = process.env.JWT_SECRET || "superhardstring";
 var join = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, inviteCode, playerAddress, game, token, savedGame, err_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                _b.trys.push([0, 3, , 4]);
+                _c.trys.push([0, 3, , 4]);
                 _a = req.body, inviteCode = _a.inviteCode, playerAddress = _a.playerAddress;
                 return [4 /*yield*/, Game_1.default.findOne({ inviteCode: inviteCode })];
             case 1:
-                game = _b.sent();
+                game = _c.sent();
                 if (!game) {
                     return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
                 }
@@ -68,10 +69,11 @@ var join = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 game.players.push(playerAddress);
                 return [4 /*yield*/, game.save()];
             case 2:
-                savedGame = _b.sent();
+                savedGame = _c.sent();
+                (_b = req.io) === null || _b === void 0 ? void 0 : _b.emit("gameUpdate_".concat(game._id), savedGame);
                 return [2 /*return*/, res.status(200).json({ token: token, game: savedGame })];
             case 3:
-                err_1 = _b.sent();
+                err_1 = _c.sent();
                 return [2 /*return*/, res.status(500).json({ error: err_1.message })];
             case 4: return [2 /*return*/];
         }

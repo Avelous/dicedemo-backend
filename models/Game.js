@@ -49,6 +49,7 @@ var gameSchema = new mongoose_1.default.Schema({
         default: [],
         validate: {
             validator: function (value) {
+                // Check if the array only contains unique strings
                 var uniqueStrings = [];
                 value.forEach(function (item) {
                     if (!uniqueStrings.includes(item)) {
