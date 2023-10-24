@@ -2,6 +2,7 @@ import Game from "../models/Game";
 import { Response, Request } from "express";
 import * as jwt from "jsonwebtoken";
 import { pusher } from "..";
+import { channel } from "..";
 
 const JWT_SECRET = process.env.JWT_SECRET || "superhardstring";
 
@@ -32,7 +33,9 @@ export const join = async (req: Request, res: Response) => {
 
     game.players.push(playerAddress);
     const savedGame = await game.save();
+
     req.io?.emit(`gameUpdate_${game._id}`, savedGame);
+    channel.publish(`gameUpdate_${game._id}`, savedGame);
     pusher.trigger("gameUpdate", `gameUpdate_${game._id}`, savedGame);
     return res.status(200).json({ token, game: savedGame });
   } catch (err) {

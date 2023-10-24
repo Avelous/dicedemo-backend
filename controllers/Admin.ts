@@ -5,6 +5,7 @@ import { JWT_SECRET } from "../backend.config";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import { pusher } from "..";
+import { channel } from "..";
 
 async function generateUniqueInvite(length: number) {
   let invites = await Invites.findOne();
@@ -87,6 +88,7 @@ export const pauseGame = async (req: Request, res: Response) => {
     const updatedGame = await game.save();
 
     req.io?.emit(`gameUpdate_${game._id}`, updatedGame);
+    channel.publish(`gameUpdate_${game._id}`, updatedGame);
     pusher.trigger("gameUpdate", `gameUpdate_${game._id}`, updatedGame);
     res.status(200).json(updatedGame);
   } catch (err) {
@@ -116,6 +118,7 @@ export const resumeGame = async (req: Request, res: Response) => {
     const updatedGame = await game.save();
 
     req.io?.emit(`gameUpdate_${game._id}`, updatedGame);
+    channel.publish(`gameUpdate_${game._id}`, updatedGame);
     pusher.trigger("gameUpdate", `gameUpdate_${game._id}`, updatedGame);
     res.status(200).json(updatedGame);
   } catch (err) {
@@ -145,6 +148,7 @@ export const endGame = async (req: Request, res: Response) => {
     const updatedGame = await game.save();
 
     req.io?.emit(`gameUpdate_${game._id}`, updatedGame);
+    channel.publish(`gameUpdate_${game._id}`, updatedGame);
     pusher.trigger("gameUpdate", `gameUpdate_${game._id}`, updatedGame);
     res.status(200).json(updatedGame);
   } catch (err) {
@@ -176,6 +180,7 @@ export const changeGameMode = async (req: Request, res: Response) => {
 
     const updatedGame = await game.save();
     req.io?.emit(`gameUpdate_${game._id}`, updatedGame);
+    channel.publish(`gameUpdate_${game._id}`, updatedGame);
     pusher.trigger("gameUpdate", `gameUpdate_${game._id}`, updatedGame);
     res.status(200).json(updatedGame);
   } catch (err) {
@@ -230,6 +235,7 @@ export const kickPlayer = async (req: Request, res: Response) => {
     const updatedGame = await game.save();
 
     req.io?.emit(`gameUpdate_${game._id}`, updatedGame);
+    channel.publish(`gameUpdate_${game._id}`, updatedGame);
     pusher.trigger("gameUpdate", `gameUpdate_${game._id}`, updatedGame);
     res.status(200).json(updatedGame);
   } catch (err) {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pusher = exports.app = void 0;
+exports.channel = exports.pusher = exports.app = void 0;
 var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose_1 = require("mongoose");
@@ -14,6 +14,7 @@ var game_1 = require("./routes/game");
 var socket_io_1 = require("socket.io");
 var http = require("http");
 var Pusher = require("pusher");
+var Ably = require("ably");
 /* CONFIGURATIONS */
 dotenv.config();
 exports.app = express();
@@ -34,6 +35,9 @@ exports.pusher = new Pusher({
     cluster: "mt1",
     useTLS: true,
 });
+/**Ably Setup */
+var ably = new Ably.Realtime({ key: "6aT3Lw.6ED1lg:VVlpr7VcTHfCwrH82plg2IBPkVzYLj0FQl-4RFls3WY" });
+exports.channel = ably.channels.get("gameUpdate");
 /*Sockets Setup*/
 var server = http.createServer(exports.app);
 var io = new socket_io_1.Server(server, {

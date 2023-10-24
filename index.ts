@@ -12,6 +12,7 @@ import gameRoutes from "./routes/game";
 import { Server } from "socket.io";
 import * as http from "http";
 import * as Pusher from "pusher";
+import * as Ably from "ably";
 
 declare global {
   namespace Express {
@@ -47,6 +48,11 @@ export const pusher = new Pusher({
   cluster: "mt1",
   useTLS: true,
 });
+
+/**Ably Setup */
+
+const ably = new Ably.Realtime({ key: "6aT3Lw.6ED1lg:VVlpr7VcTHfCwrH82plg2IBPkVzYLj0FQl-4RFls3WY" });
+export const channel = ably.channels.get("gameUpdate");
 
 /*Sockets Setup*/
 const server = http.createServer(app);
