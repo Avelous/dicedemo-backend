@@ -42,6 +42,7 @@ var Invites_1 = require("../models/Invites");
 var backend_config_1 = require("../backend.config");
 var bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
+var __1 = require("..");
 function generateUniqueInvite(length) {
     return __awaiter(this, void 0, void 0, function () {
         var invites, newInvites, characters, invite, existingCodes, i, randomIndex;
@@ -152,6 +153,7 @@ var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, f
             case 2:
                 updatedGame = _b.sent();
                 (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
+                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
@@ -189,6 +191,7 @@ var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 2:
                 updatedGame = _b.sent();
                 (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
+                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
@@ -227,6 +230,7 @@ var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
             case 2:
                 updatedGame = _b.sent();
                 (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
+                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
@@ -265,6 +269,7 @@ var changeGameMode = function (req, res) { return __awaiter(void 0, void 0, void
             case 2:
                 updatedGame = _b.sent();
                 (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
+                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
@@ -335,6 +340,7 @@ var kickPlayer = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 2:
                 updatedGame = _b.sent();
                 (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
+                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:

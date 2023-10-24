@@ -11,6 +11,7 @@ import playerRoutes from "./routes/player";
 import gameRoutes from "./routes/game";
 import { Server } from "socket.io";
 import * as http from "http";
+import Pusher from "pusher";
 
 declare global {
   namespace Express {
@@ -32,6 +33,16 @@ app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb" }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
+
+/**Pusher Setup */
+
+export const pusher = new Pusher({
+  appId: "1693689",
+  key: "6fa5b078200dc7cc410e",
+  secret: "c996bc7eda324f1f4c73",
+  cluster: "mt1",
+  useTLS: true,
+});
 
 /*Sockets Setup*/
 const server = http.createServer(app);

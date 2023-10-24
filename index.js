@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
+exports.pusher = exports.app = void 0;
 var express = require("express");
 var bodyParser = require("body-parser");
 var mongoose_1 = require("mongoose");
@@ -13,6 +13,7 @@ var player_1 = require("./routes/player");
 var game_1 = require("./routes/game");
 var socket_io_1 = require("socket.io");
 var http = require("http");
+var pusher_1 = require("pusher");
 /* CONFIGURATIONS */
 dotenv.config();
 exports.app = express();
@@ -23,6 +24,14 @@ exports.app.use(morgan("common"));
 exports.app.use(bodyParser.json({ limit: "30mb" }));
 exports.app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 exports.app.use(cors());
+/**Pusher Setup */
+exports.pusher = new pusher_1.default({
+    appId: "1693689",
+    key: "6fa5b078200dc7cc410e",
+    secret: "c996bc7eda324f1f4c73",
+    cluster: "mt1",
+    useTLS: true,
+});
 /*Sockets Setup*/
 var server = http.createServer(exports.app);
 var io = new socket_io_1.Server(server, {

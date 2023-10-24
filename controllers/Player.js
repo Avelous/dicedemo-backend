@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.markSlotsAsFoundPerPlayer = exports.sweepPrize = exports.leave = exports.join = void 0;
 var Game_1 = require("../models/Game");
 var jwt = require("jsonwebtoken");
+var __1 = require("..");
 var JWT_SECRET = process.env.JWT_SECRET || "superhardstring";
 var join = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, inviteCode, playerAddress, game, token, savedGame, err_1;
@@ -71,6 +72,7 @@ var join = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
             case 2:
                 savedGame = _c.sent();
                 (_b = req.io) === null || _b === void 0 ? void 0 : _b.emit("gameUpdate_".concat(game._id), savedGame);
+                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), savedGame);
                 return [2 /*return*/, res.status(200).json({ token: token, game: savedGame })];
             case 3:
                 err_1 = _c.sent();
