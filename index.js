@@ -13,7 +13,7 @@ var player_1 = require("./routes/player");
 var game_1 = require("./routes/game");
 var socket_io_1 = require("socket.io");
 var http = require("http");
-var pusher_1 = require("pusher");
+var Pusher = require("pusher");
 /* CONFIGURATIONS */
 dotenv.config();
 exports.app = express();
@@ -25,7 +25,7 @@ exports.app.use(bodyParser.json({ limit: "30mb" }));
 exports.app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 exports.app.use(cors());
 /**Pusher Setup */
-exports.pusher = new pusher_1.default({
+exports.pusher = new Pusher({
     appId: "1693689",
     key: "6fa5b078200dc7cc410e",
     secret: "c996bc7eda324f1f4c73",

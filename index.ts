@@ -11,7 +11,7 @@ import playerRoutes from "./routes/player";
 import gameRoutes from "./routes/game";
 import { Server } from "socket.io";
 import * as http from "http";
-import Pusher from "pusher";
+import * as Pusher from "pusher";
 
 declare global {
   namespace Express {
