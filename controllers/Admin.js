@@ -43,7 +43,6 @@ var backend_config_1 = require("../backend.config");
 var bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 var __1 = require("..");
-var __2 = require("..");
 function generateUniqueInvite(length) {
     return __awaiter(this, void 0, void 0, function () {
         var invites, newInvites, characters, invite, existingCodes, i, randomIndex;
@@ -132,15 +131,14 @@ var createGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 exports.createGame = createGame;
 var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, game, updatedGame, err_2;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _b.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 4]);
                 id = req.params.id;
                 return [4 /*yield*/, Game_1.default.findById(id)];
             case 1:
-                game = _b.sent();
+                game = _a.sent();
                 console.log(game);
                 if (!game) {
                     return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
@@ -152,14 +150,12 @@ var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 game.status = "paused";
                 return [4 /*yield*/, game.save()];
             case 2:
-                updatedGame = _b.sent();
-                (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
-                __2.channel.publish("gameUpdate_".concat(game._id), updatedGame);
-                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
+                updatedGame = _a.sent();
+                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
-                err_2 = _b.sent();
+                err_2 = _a.sent();
                 res.status(500).json({ error: err_2.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -169,15 +165,14 @@ var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, f
 exports.pauseGame = pauseGame;
 var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, game, updatedGame, err_3;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _b.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 4]);
                 id = req.params.id;
                 return [4 /*yield*/, Game_1.default.findById(id)];
             case 1:
-                game = _b.sent();
+                game = _a.sent();
                 if (!game) {
                     return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
                 }
@@ -191,14 +186,12 @@ var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 game.status = "ongoing";
                 return [4 /*yield*/, game.save()];
             case 2:
-                updatedGame = _b.sent();
-                (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
-                __2.channel.publish("gameUpdate_".concat(game._id), updatedGame);
-                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
+                updatedGame = _a.sent();
+                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
-                err_3 = _b.sent();
+                err_3 = _a.sent();
                 res.status(500).json({ error: err_3.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -208,15 +201,14 @@ var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 exports.resumeGame = resumeGame;
 var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, game, winner, updatedGame, err_4;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _b.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 4]);
                 id = req.params.id;
                 return [4 /*yield*/, Game_1.default.findById(id)];
             case 1:
-                game = _b.sent();
+                game = _a.sent();
                 if (!game) {
                     return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
                 }
@@ -231,14 +223,12 @@ var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 }
                 return [4 /*yield*/, game.save()];
             case 2:
-                updatedGame = _b.sent();
-                (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
-                __2.channel.publish("gameUpdate_".concat(game._id), updatedGame);
-                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
+                updatedGame = _a.sent();
+                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
-                err_4 = _b.sent();
+                err_4 = _a.sent();
                 res.status(500).json({ error: err_4.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -248,16 +238,15 @@ var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
 exports.endGame = endGame;
 var changeGameMode = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, mode, game, updatedGame, err_5;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _b.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 4]);
                 id = req.params.id;
                 mode = req.body.mode;
                 return [4 /*yield*/, Game_1.default.findById(id)];
             case 1:
-                game = _b.sent();
+                game = _a.sent();
                 console.log(game);
                 if (!game) {
                     return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
@@ -271,14 +260,12 @@ var changeGameMode = function (req, res) { return __awaiter(void 0, void 0, void
                 game.mode = mode;
                 return [4 /*yield*/, game.save()];
             case 2:
-                updatedGame = _b.sent();
-                (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
-                __2.channel.publish("gameUpdate_".concat(game._id), updatedGame);
-                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
+                updatedGame = _a.sent();
+                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
-                err_5 = _b.sent();
+                err_5 = _a.sent();
                 res.status(500).json({ error: err_5.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -320,16 +307,15 @@ var changePrize = function (req, res) { return __awaiter(void 0, void 0, void 0,
 exports.changePrize = changePrize;
 var kickPlayer = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, playerAddress, game, playerIndex, updatedGame, err_7;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _b.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 3, , 4]);
                 id = req.params.id;
                 playerAddress = req.body.playerAddress;
                 return [4 /*yield*/, Game_1.default.findById(id)];
             case 1:
-                game = _b.sent();
+                game = _a.sent();
                 if (!game) {
                     return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
                 }
@@ -343,14 +329,12 @@ var kickPlayer = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 game.players.splice(playerIndex, 1);
                 return [4 /*yield*/, game.save()];
             case 2:
-                updatedGame = _b.sent();
-                (_a = req.io) === null || _a === void 0 ? void 0 : _a.emit("gameUpdate_".concat(game._id), updatedGame);
-                __2.channel.publish("gameUpdate_".concat(game._id), updatedGame);
-                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), updatedGame);
+                updatedGame = _a.sent();
+                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
-                err_7 = _b.sent();
+                err_7 = _a.sent();
                 res.status(500).json({ error: err_7.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];

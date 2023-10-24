@@ -40,19 +40,17 @@ exports.markSlotsAsFoundPerPlayer = exports.sweepPrize = exports.leave = exports
 var Game_1 = require("../models/Game");
 var jwt = require("jsonwebtoken");
 var __1 = require("..");
-var __2 = require("..");
 var JWT_SECRET = process.env.JWT_SECRET || "superhardstring";
 var join = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, inviteCode, playerAddress, game, token, savedGame, err_1;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _c.trys.push([0, 3, , 4]);
+                _b.trys.push([0, 3, , 4]);
                 _a = req.body, inviteCode = _a.inviteCode, playerAddress = _a.playerAddress;
                 return [4 /*yield*/, Game_1.default.findOne({ inviteCode: inviteCode })];
             case 1:
-                game = _c.sent();
+                game = _b.sent();
                 if (!game) {
                     return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
                 }
@@ -71,13 +69,11 @@ var join = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 game.players.push(playerAddress);
                 return [4 /*yield*/, game.save()];
             case 2:
-                savedGame = _c.sent();
-                (_b = req.io) === null || _b === void 0 ? void 0 : _b.emit("gameUpdate_".concat(game._id), savedGame);
-                __2.channel.publish("gameUpdate_".concat(game._id), savedGame);
-                __1.pusher.trigger("gameUpdate", "gameUpdate_".concat(game._id), savedGame);
+                savedGame = _b.sent();
+                __1.channel.publish("gameUpdate_".concat(game._id), savedGame);
                 return [2 /*return*/, res.status(200).json({ token: token, game: savedGame })];
             case 3:
-                err_1 = _c.sent();
+                err_1 = _b.sent();
                 return [2 /*return*/, res.status(500).json({ error: err_1.message })];
             case 4: return [2 /*return*/];
         }

@@ -9,16 +9,13 @@ import * as morgan from "morgan";
 import adminRoutes from "./routes/admin";
 import playerRoutes from "./routes/player";
 import gameRoutes from "./routes/game";
-import { Server } from "socket.io";
 import * as http from "http";
-import * as Pusher from "pusher";
 import * as Ably from "ably";
 
 declare global {
   namespace Express {
     interface Request {
       user?: any;
-      io?: Server;
     }
   }
 }
@@ -33,47 +30,14 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
 app.use(bodyParser.json({ limit: "30mb" }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(
-  cors({
-    origin: "*",
-  }),
-);
-
-/**Pusher Setup */
-
-export const pusher = new Pusher({
-  appId: "1693689",
-  key: "6fa5b078200dc7cc410e",
-  secret: "c996bc7eda324f1f4c73",
-  cluster: "mt1",
-  useTLS: true,
-});
+app.use(cors());
 
 /**Ably Setup */
 
 const ably = new Ably.Realtime({ key: "6aT3Lw.6ED1lg:VVlpr7VcTHfCwrH82plg2IBPkVzYLj0FQl-4RFls3WY" });
 export const channel = ably.channels.get("gameUpdate");
 
-/*Sockets Setup*/
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-  },
-});
-
-io.on("connection", socket => {
-  console.log("A user connected to Socket");
-  socket.on("disconnect", () => {
-    console.log("A user disconnected from Sockets");
-  });
-});
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-  req.io = io;
-  next();
-});
-
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
 const MONGO_URL = process.env.MONGO_URL || "";
