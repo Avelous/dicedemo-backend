@@ -60,8 +60,8 @@ var connectWithRetry = function () {
     mongoose_1.default
         .connect(MONGO_URL)
         .then(function () {
-        // app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
-        server.listen(PORT, function () { return console.log("Server Connected, Port: ".concat(PORT)); });
+        exports.app.listen(PORT, function () { return console.log("Server Port: ".concat(PORT)); });
+        // server.listen(PORT, () => console.log(`Server Connected, Port: ${PORT}`));
     })
         .catch(function (error) {
         console.log("".concat(error, " did not connect"));

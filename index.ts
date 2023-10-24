@@ -77,8 +77,8 @@ const connectWithRetry = () => {
   mongoose
     .connect(MONGO_URL)
     .then(() => {
-      // app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
-      server.listen(PORT, () => console.log(`Server Connected, Port: ${PORT}`));
+      app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+      // server.listen(PORT, () => console.log(`Server Connected, Port: ${PORT}`));
     })
     .catch(error => {
       console.log(`${error} did not connect`);
