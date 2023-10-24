@@ -23,7 +23,9 @@ exports.app.use(helmet_1.default.crossOriginResourcePolicy({ policy: "cross-orig
 exports.app.use(morgan("common"));
 exports.app.use(bodyParser.json({ limit: "30mb" }));
 exports.app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-exports.app.use(cors());
+exports.app.use(cors({
+    origin: "*",
+}));
 /**Pusher Setup */
 exports.pusher = new Pusher({
     appId: "1693689",
@@ -60,8 +62,8 @@ var connectWithRetry = function () {
     mongoose_1.default
         .connect(MONGO_URL)
         .then(function () {
-        exports.app.listen(PORT, function () { return console.log("Server Port: ".concat(PORT)); });
-        // server.listen(PORT, () => console.log(`Server Connected, Port: ${PORT}`));
+        // app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+        server.listen(PORT, function () { return console.log("Server Connected, Port: ".concat(PORT)); });
     })
         .catch(function (error) {
         console.log("".concat(error, " did not connect"));
