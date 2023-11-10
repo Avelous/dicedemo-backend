@@ -71,10 +71,12 @@ var join = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
             case 2:
                 savedGame = _b.sent();
                 __1.channel.publish("gameUpdate_".concat(game._id), savedGame);
-                return [2 /*return*/, res.status(200).json({ token: token, game: savedGame })];
+                res.status(200).json({ token: token, game: savedGame });
+                return [3 /*break*/, 4];
             case 3:
                 err_1 = _b.sent();
-                return [2 /*return*/, res.status(500).json({ error: err_1.message })];
+                res.status(500).json({ error: err_1.message });
+                return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
