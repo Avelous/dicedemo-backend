@@ -139,7 +139,6 @@ var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, Game_1.default.findById(id)];
             case 1:
                 game = _a.sent();
-                console.log(game);
                 if (!game) {
                     return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
                 }
@@ -247,7 +246,6 @@ var changeGameMode = function (req, res) { return __awaiter(void 0, void 0, void
                 return [4 /*yield*/, Game_1.default.findById(id)];
             case 1:
                 game = _a.sent();
-                console.log(game);
                 if (!game) {
                     return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
                 }
