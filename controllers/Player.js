@@ -42,7 +42,7 @@ var jwt = require("jsonwebtoken");
 var __1 = require("..");
 var JWT_SECRET = process.env.JWT_SECRET || "superhardstring";
 var join = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, inviteCode, playerAddress, game, token, savedGame, err_1;
+    var _a, inviteCode, playerAddress, game, token, savedGame, channel, err_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -70,7 +70,8 @@ var join = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 return [4 /*yield*/, game.save()];
             case 2:
                 savedGame = _b.sent();
-                __1.channel.publish("gameUpdate_".concat(game._id), savedGame);
+                channel = __1.ably.channels.get("gameUpdate");
+                channel.publish("gameUpdate", savedGame);
                 res.status(200).json({ token: token, game: savedGame });
                 return [3 /*break*/, 4];
             case 3:

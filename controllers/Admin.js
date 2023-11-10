@@ -130,7 +130,7 @@ var createGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.createGame = createGame;
 var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, game, updatedGame, err_2;
+    var id, game, updatedGame, channel, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -150,7 +150,8 @@ var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, game.save()];
             case 2:
                 updatedGame = _a.sent();
-                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
+                channel = __1.ably.channels.get("gameUpdate");
+                channel.publish("gameUpdate", updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
@@ -163,7 +164,7 @@ var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, f
 }); };
 exports.pauseGame = pauseGame;
 var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, game, updatedGame, err_3;
+    var id, game, updatedGame, channel, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -186,7 +187,8 @@ var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, game.save()];
             case 2:
                 updatedGame = _a.sent();
-                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
+                channel = __1.ably.channels.get("gameUpdate");
+                channel.publish("gameUpdate", updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
@@ -199,7 +201,7 @@ var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.resumeGame = resumeGame;
 var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, game, winner, updatedGame, err_4;
+    var id, game, winner, updatedGame, channel, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -223,7 +225,8 @@ var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 return [4 /*yield*/, game.save()];
             case 2:
                 updatedGame = _a.sent();
-                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
+                channel = __1.ably.channels.get("gameUpdate");
+                channel.publish("gameUpdate", updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
@@ -236,7 +239,7 @@ var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
 }); };
 exports.endGame = endGame;
 var changeGameMode = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, mode, game, updatedGame, err_5;
+    var id, mode, game, updatedGame, channel, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -259,7 +262,8 @@ var changeGameMode = function (req, res) { return __awaiter(void 0, void 0, void
                 return [4 /*yield*/, game.save()];
             case 2:
                 updatedGame = _a.sent();
-                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
+                channel = __1.ably.channels.get("gameUpdate");
+                channel.publish("gameUpdate", updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
@@ -304,7 +308,7 @@ var changePrize = function (req, res) { return __awaiter(void 0, void 0, void 0,
 }); };
 exports.changePrize = changePrize;
 var kickPlayer = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, playerAddress, game, playerIndex, updatedGame, err_7;
+    var id, playerAddress, game, playerIndex, updatedGame, channel, err_7;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -328,7 +332,8 @@ var kickPlayer = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, game.save()];
             case 2:
                 updatedGame = _a.sent();
-                __1.channel.publish("gameUpdate_".concat(game._id), updatedGame);
+                channel = __1.ably.channels.get("gameUpdate");
+                channel.publish("gameUpdate", updatedGame);
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
