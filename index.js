@@ -60,7 +60,7 @@ exports.app.use(bodyParser.json({ limit: "30mb" }));
 exports.app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 exports.app.use(cors());
 /**Ably Setup */
-exports.ably = new Ably.Realtime({ key: "6aT3Lw.6ED1lg:VVlpr7VcTHfCwrH82plg2IBPkVzYLj0FQl-4RFls3WY" });
+exports.ably = new Ably.Realtime({ key: process.env.ABLY_API_KEY });
 var server = http.createServer(exports.app);
 /* MONGOOSE SETUP */
 var PORT = process.env.PORT || 6001;
