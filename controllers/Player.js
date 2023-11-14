@@ -60,9 +60,6 @@ var join = function (req, res) { return __awaiter(void 0, void 0, void 0, functi
                 if (game.players.length >= game.maxPlayers) {
                     return [2 /*return*/, res.status(400).json({ error: "Game is full." })];
                 }
-                if (game.players.includes(playerAddress)) {
-                    return [2 /*return*/, res.status(200).json(game)]; // Player is already in the game
-                }
                 token = void 0;
                 if (JWT_SECRET)
                     token = jwt.sign({ address: playerAddress }, JWT_SECRET);

@@ -22,10 +22,6 @@ export const join = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Game is full." });
     }
 
-    if (game.players.includes(playerAddress)) {
-      return res.status(200).json(game); // Player is already in the game
-    }
-
     let token;
 
     if (JWT_SECRET) token = jwt.sign({ address: playerAddress }, JWT_SECRET);
