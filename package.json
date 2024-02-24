@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "backend": "nodemon index.js"
+    "backend": "nodemon index.js",
+    "build": "tsc index.ts"
   },
   "packageManager": "yarn@4.1.0",
   "dependencies": {
