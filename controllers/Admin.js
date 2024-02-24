@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.kickPlayer = exports.changePrize = exports.changeGameMode = exports.endGame = exports.resumeGame = exports.pauseGame = exports.createGame = void 0;
+exports.kickPlayer = exports.changeGameMode = exports.endGame = exports.resumeGame = exports.pauseGame = exports.restartWithNewPk = exports.createGame = void 0;
 var Game_1 = require("../models/Game");
 var Invites_1 = require("../models/Invites");
 var backend_config_1 = require("../backend.config");
@@ -87,13 +87,13 @@ function generateUniqueInvite(length) {
     });
 }
 var createGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, maxPlayers, diceCount, hiddenChars, privateKey, prize, mode, adminAddress, salt, newGame, _b, token, savedGame, err_1;
+    var _a, diceCount, hiddenChars, privateKey, hiddenPrivateKey, mode, adminAddress, salt, newGame, _b, token, savedGame, err_1;
     var _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
                 _d.trys.push([0, 4, , 5]);
-                _a = req.body, maxPlayers = _a.maxPlayers, diceCount = _a.diceCount, hiddenChars = _a.hiddenChars, privateKey = _a.privateKey, prize = _a.prize, mode = _a.mode, adminAddress = _a.adminAddress;
+                _a = req.body, diceCount = _a.diceCount, hiddenChars = _a.hiddenChars, privateKey = _a.privateKey, hiddenPrivateKey = _a.hiddenPrivateKey, mode = _a.mode, adminAddress = _a.adminAddress;
                 return [4 /*yield*/, bcrypt.genSalt()];
             case 1:
                 salt = _d.sent();
@@ -105,12 +105,11 @@ var createGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, generateUniqueInvite(8)];
             case 2:
                 newGame = new (_b.apply(Game_1.default, [void 0, (_c.inviteCode = _d.sent(),
-                        _c.maxPlayers = maxPlayers,
                         _c.diceCount = diceCount,
                         _c.mode = mode,
                         _c.privateKey = privateKey,
+                        _c.hiddenPrivateKey = hiddenPrivateKey,
                         _c.hiddenChars = hiddenChars,
-                        _c.prize = prize,
                         _c)]))();
                 token = void 0;
                 if (backend_config_1.JWT_SECRET)
@@ -129,8 +128,47 @@ var createGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.createGame = createGame;
+var restartWithNewPk = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, diceCount, hiddenChars, privateKey, hiddenPrivateKey, adminAddress, id, game, updatedGame, channel, err_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 3, , 4]);
+                _a = req.body, diceCount = _a.diceCount, hiddenChars = _a.hiddenChars, privateKey = _a.privateKey, hiddenPrivateKey = _a.hiddenPrivateKey, adminAddress = _a.adminAddress;
+                id = req.params.id;
+                return [4 /*yield*/, Game_1.default.findById(id)];
+            case 1:
+                game = _b.sent();
+                if ((game === null || game === void 0 ? void 0 : game.status) !== "finished") {
+                    return [2 /*return*/, res.status(400).json({ error: "Game is not finished." })];
+                }
+                game.diceCount = diceCount;
+                game.hiddenChars = hiddenChars;
+                game.privateKey = privateKey;
+                game.hiddenPrivateKey = hiddenPrivateKey;
+                game.mode = "manual";
+                game.adminAddress = adminAddress;
+                game.winner = undefined;
+                game.status = "ongoing";
+                return [4 /*yield*/, game.save()];
+            case 2:
+                updatedGame = _b.sent();
+                console.log(updatedGame);
+                channel = __1.ably.channels.get("gameUpdate");
+                channel.publish("gameUpdate", updatedGame);
+                res.status(200).json(updatedGame);
+                return [3 /*break*/, 4];
+            case 3:
+                err_2 = _b.sent();
+                res.status(500).json({ error: err_2.message });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.restartWithNewPk = restartWithNewPk;
 var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, game, updatedGame, channel, err_2;
+    var id, game, updatedGame, channel, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -155,8 +193,8 @@ var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
-                err_2 = _a.sent();
-                res.status(500).json({ error: err_2.message });
+                err_3 = _a.sent();
+                res.status(500).json({ error: err_3.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -164,7 +202,7 @@ var pauseGame = function (req, res) { return __awaiter(void 0, void 0, void 0, f
 }); };
 exports.pauseGame = pauseGame;
 var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, game, updatedGame, channel, err_3;
+    var id, game, updatedGame, channel, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -192,8 +230,8 @@ var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
-                err_3 = _a.sent();
-                res.status(500).json({ error: err_3.message });
+                err_4 = _a.sent();
+                res.status(500).json({ error: err_4.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -201,7 +239,7 @@ var resumeGame = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 exports.resumeGame = resumeGame;
 var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, game, winner, updatedGame, channel, err_4;
+    var id, game, winner, updatedGame, channel, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -230,8 +268,8 @@ var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
-                err_4 = _a.sent();
-                res.status(500).json({ error: err_4.message });
+                err_5 = _a.sent();
+                res.status(500).json({ error: err_5.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -239,7 +277,7 @@ var endGame = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
 }); };
 exports.endGame = endGame;
 var changeGameMode = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, mode, game, updatedGame, channel, err_5;
+    var id, mode, game, updatedGame, channel, err_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -255,7 +293,7 @@ var changeGameMode = function (req, res) { return __awaiter(void 0, void 0, void
                 // if (game.status !== "paused") {
                 //   return res.status(400).json({ error: "Game is not paused." });
                 // }
-                if (mode !== "auto" && mode !== "manual") {
+                if (mode !== "auto" && mode !== "manual" && mode !== "brute") {
                     return [2 /*return*/, res.status(400).json({ error: "Invalid game mode." })];
                 }
                 game.mode = mode;
@@ -267,38 +305,6 @@ var changeGameMode = function (req, res) { return __awaiter(void 0, void 0, void
                 res.status(200).json(updatedGame);
                 return [3 /*break*/, 4];
             case 3:
-                err_5 = _a.sent();
-                res.status(500).json({ error: err_5.message });
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-exports.changeGameMode = changeGameMode;
-var changePrize = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var gameId, newPrize, game, updatedGame, err_6;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                gameId = req.params.gameId;
-                newPrize = req.body.newPrize;
-                return [4 /*yield*/, Game_1.default.findById(gameId)];
-            case 1:
-                game = _a.sent();
-                if (!game) {
-                    return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
-                }
-                if (game.status !== "ongoing") {
-                    return [2 /*return*/, res.status(400).json({ error: "Game is not ongoing." })];
-                }
-                game.prize = newPrize;
-                return [4 /*yield*/, game.save()];
-            case 2:
-                updatedGame = _a.sent();
-                res.status(200).json(updatedGame);
-                return [3 /*break*/, 4];
-            case 3:
                 err_6 = _a.sent();
                 res.status(500).json({ error: err_6.message });
                 return [3 /*break*/, 4];
@@ -306,7 +312,7 @@ var changePrize = function (req, res) { return __awaiter(void 0, void 0, void 0,
         }
     });
 }); };
-exports.changePrize = changePrize;
+exports.changeGameMode = changeGameMode;
 var kickPlayer = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, playerAddress, game, playerIndex, updatedGame, channel, err_7;
     return __generator(this, function (_a) {

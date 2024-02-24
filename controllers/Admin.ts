@@ -40,7 +40,7 @@ async function generateUniqueInvite(length: number) {
 
 export const createGame = async (req: Request, res: Response) => {
   try {
-    const { maxPlayers, diceCount, hiddenChars, privateKey, prize, mode, adminAddress } = req.body;
+    const { diceCount, hiddenChars, privateKey, hiddenPrivateKey, mode, adminAddress } = req.body;
 
     const salt = await bcrypt.genSalt();
     // const privateKeyHash = await bcrypt.hash(privateKey, salt);
@@ -49,12 +49,11 @@ export const createGame = async (req: Request, res: Response) => {
       adminAddress,
       status: "ongoing",
       inviteCode: await generateUniqueInvite(8),
-      maxPlayers,
       diceCount,
       mode,
       privateKey,
+      hiddenPrivateKey,
       hiddenChars,
-      prize,
     });
 
     let token;
@@ -63,6 +62,36 @@ export const createGame = async (req: Request, res: Response) => {
 
     const savedGame = await newGame.save();
     res.status(201).json({ token, game: savedGame });
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+};
+
+export const restartWithNewPk = async (req: Request, res: Response) => {
+  try {
+    const { diceCount, hiddenChars, privateKey, hiddenPrivateKey, adminAddress } = req.body;
+    const { id } = req.params;
+    const game = await Game.findById(id);
+
+    if (game?.status !== "finished") {
+      return res.status(400).json({ error: "Game is not finished." });
+    }
+
+    game.diceCount = diceCount;
+    game.hiddenChars = hiddenChars;
+    game.privateKey = privateKey;
+    game.hiddenPrivateKey = hiddenPrivateKey;
+    game.mode = "manual";
+    game.adminAddress = adminAddress;
+    game.winner = undefined;
+    game.status = "ongoing";
+
+    const updatedGame = await game.save();
+    console.log(updatedGame);
+
+    const channel = ably.channels.get(`gameUpdate`);
+    channel.publish(`gameUpdate`, updatedGame);
+    res.status(200).json(updatedGame);
   } catch (err) {
     res.status(500).json({ error: (err as Error).message });
   }
@@ -116,7 +145,6 @@ export const resumeGame = async (req: Request, res: Response) => {
 
     const channel = ably.channels.get(`gameUpdate`);
     channel.publish(`gameUpdate`, updatedGame);
-
     res.status(200).json(updatedGame);
   } catch (err) {
     res.status(500).json({ error: (err as Error).message });
@@ -168,7 +196,7 @@ export const changeGameMode = async (req: Request, res: Response) => {
     //   return res.status(400).json({ error: "Game is not paused." });
     // }
 
-    if (mode !== "auto" && mode !== "manual") {
+    if (mode !== "auto" && mode !== "manual" && mode !== "brute") {
       return res.status(400).json({ error: "Invalid game mode." });
     }
 
@@ -178,30 +206,6 @@ export const changeGameMode = async (req: Request, res: Response) => {
 
     const channel = ably.channels.get(`gameUpdate`);
     channel.publish(`gameUpdate`, updatedGame);
-
-    res.status(200).json(updatedGame);
-  } catch (err) {
-    res.status(500).json({ error: (err as Error).message });
-  }
-};
-
-export const changePrize = async (req: Request, res: Response) => {
-  try {
-    const { gameId } = req.params;
-    const { newPrize } = req.body;
-
-    const game = await Game.findById(gameId);
-
-    if (!game) {
-      return res.status(404).json({ error: "Game not found." });
-    }
-
-    if (game.status !== "ongoing") {
-      return res.status(400).json({ error: "Game is not ongoing." });
-    }
-
-    game.prize = newPrize;
-    const updatedGame = await game.save();
 
     res.status(200).json(updatedGame);
   } catch (err) {
@@ -230,7 +234,6 @@ export const kickPlayer = async (req: Request, res: Response) => {
 
     game.players.splice(playerIndex, 1);
     const updatedGame = await game.save();
-
     const channel = ably.channels.get(`gameUpdate`);
     channel.publish(`gameUpdate`, updatedGame);
 
