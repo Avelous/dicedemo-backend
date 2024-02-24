@@ -6,7 +6,7 @@
     "backend": "nodemon index.js",
     "start": "node index.js"
   },
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "yarn@4.1.0",
   "dependencies": {
     "ably": "^1.2.45",
     "bcrypt": "^5.1.0",
