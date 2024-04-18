@@ -10,4 +10,5 @@ router.patch("/pause/:id", auth_1.verifyToken, Admin_1.pauseGame);
 router.patch("/resume/:id", auth_1.verifyToken, Admin_1.resumeGame);
 router.patch("/kickplayer/:id", auth_1.verifyToken, Admin_1.kickPlayer);
 router.patch("/restartwithnewpk/:id", auth_1.verifyToken, Admin_1.restartWithNewPk);
+router.patch("/varyhiddenprivatekey/:id", auth_1.verifyToken, Admin_1.varyHiddenPrivatekey);
 exports.default = router;

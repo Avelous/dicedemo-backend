@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.kickPlayer = exports.changeGameMode = exports.endGame = exports.resumeGame = exports.pauseGame = exports.restartWithNewPk = exports.createGame = void 0;
+exports.varyHiddenPrivatekey = exports.kickPlayer = exports.changeGameMode = exports.endGame = exports.resumeGame = exports.pauseGame = exports.restartWithNewPk = exports.createGame = void 0;
 var Game_1 = require("../models/Game");
 var Invites_1 = require("../models/Invites");
 var backend_config_1 = require("../backend.config");
@@ -351,3 +351,39 @@ var kickPlayer = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.kickPlayer = kickPlayer;
+var varyHiddenPrivatekey = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, _a, hiddenChars, hiddenPrivateKey, diceCount, game, updatedGame, channel, err_8;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 3, , 4]);
+                id = req.params.id;
+                _a = req.body, hiddenChars = _a.hiddenChars, hiddenPrivateKey = _a.hiddenPrivateKey, diceCount = _a.diceCount;
+                return [4 /*yield*/, Game_1.default.findById(id)];
+            case 1:
+                game = _b.sent();
+                if (!game) {
+                    return [2 /*return*/, res.status(404).json({ error: "Game not found." })];
+                }
+                if (diceCount < 1 || diceCount > 64) {
+                    return [2 /*return*/, res.status(400).json({ error: "Invalid dice count." })];
+                }
+                game.hiddenChars = hiddenChars;
+                game.hiddenPrivateKey = hiddenPrivateKey;
+                game.diceCount = diceCount;
+                return [4 /*yield*/, game.save()];
+            case 2:
+                updatedGame = _b.sent();
+                channel = __1.ably.channels.get("gameUpdate");
+                channel.publish("gameUpdate", updatedGame);
+                res.status(200).json(updatedGame);
+                return [3 /*break*/, 4];
+            case 3:
+                err_8 = _b.sent();
+                res.status(500).json({ error: err_8.message });
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.varyHiddenPrivatekey = varyHiddenPrivatekey;
