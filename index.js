@@ -38,12 +38,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ably = exports.app = void 0;
 var express = require("express");
-var bodyParser = require("body-parser");
 var mongoose_1 = require("mongoose");
 var cors = require("cors");
 var dotenv = require("dotenv");
 var helmet_1 = require("helmet");
-var morgan = require("morgan");
 var admin_1 = require("./routes/admin");
 var player_1 = require("./routes/player");
 var game_1 = require("./routes/game");
@@ -55,9 +53,6 @@ exports.app = express();
 exports.app.use(express.json());
 exports.app.use((0, helmet_1.default)());
 exports.app.use(helmet_1.default.crossOriginResourcePolicy({ policy: "cross-origin" }));
-exports.app.use(morgan("common"));
-exports.app.use(bodyParser.json({ limit: "30mb" }));
-exports.app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 exports.app.use(cors());
 /**Ably Setup */
 exports.ably = new Ably.Realtime({ key: process.env.ABLY_API_KEY });
